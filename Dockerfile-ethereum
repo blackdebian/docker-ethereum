@@ -1,0 +1,7 @@
+FROM ethereum/client-go:latest
+
+WORKDIR /root
+
+ADD ["./Genesis.json", "."]
+
+RUN ["geth", "init", "/root/Genesis.json"]

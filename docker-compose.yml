@@ -1,0 +1,51 @@
+version: '3.2'
+
+
+volumes:
+
+  node1-data: null
+  node2-data: null
+  cpuminer: null
+
+
+services:
+
+  node1:
+    build:
+      context: ./
+      dockerfile: Dockerfile-ethereum
+    command: --rpc --rpcaddr "0.0.0.0"
+    restart: on-failure
+    ports:
+      - 8545:8545
+      - 30303:30303
+    volumes:
+      - node1-data:/root/.ethereum
+
+
+  node2:
+    build:
+      context: ./
+      dockerfile: Dockerfile-ethereum
+    restart: on-failure
+    ports:
+      - 8645:8545
+      - 30403:30303
+    depends_on:
+      - node1
+    volumes:
+      - node2-data:/root/.ethereum
+
+
+  cpuminer:
+    build:
+      context: ./
+      dockerfile: Dockerfile-ethereum
+    command: --mine --minerthreads=1 --etherbase=0x0000000000000000000000000000000000000001
+    depends_on:
+      - node1
+      - node2
+    volumes:
+      - cpuminer:/root/.ethereum
+
+
