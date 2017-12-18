@@ -13,12 +13,8 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile-ethereum
-    command: '
-      --networkid=1377
-      --bootnodes="enode://674d40344dc5af8635e9e63d27590b8febec74a3ea7eba4f45e8a90ee601a65388e3309c59902d42b715a07be1a587bb94caddab6c7a5c0c5419924f1512648d@node1:30303"
-      --rpc --rpcaddr "0.0.0.0" --rpccorsdomain="*"
-      --ws  --wsaddr  "0.0.0.0" --wsorigins="*"
-      --mine --minerthreads=1 --etherbase=0x0000000000000000000000000000000000000001'
+    command: '--networkid=1377'
+            # --mine --minerthreads=1 --etherbase=0x0000000000000000000000000000000000000001'
     restart: on-failure
     ports:
       - 8545:8545
@@ -32,34 +28,13 @@ services:
     build:
       context: ./
       dockerfile: Dockerfile-ethereum
-    command: '
-      --bootnodes="enode://674d40344dc5af8635e9e63d27590b8febec74a3ea7eba4f45e8a90ee601a65388e3309c59902d42b715a07be1a587bb94caddab6c7a5c0c5419924f1512648d@node1:30303"
-      --port 30403 --rpcport 8645 --networkid=1377'
+    command: '--networkid=1377'
     restart: on-failure
     ports:
-      - 8645:8645
-      - 30403:30403
-    links:
-      - node1
-    depends_on:
-      - node1
+      - 8545:8545
+      - 8546:8546
+      - 30303:30303
     volumes:
-      - node1-data:/root/boot
       - node2-data:/root/.ethereum
-
-
-  # cpuminer:
-  #   build:
-  #     context: ./
-  #     dockerfile: Dockerfile-ethereum
-  #   command: --mine --minerthreads=1 --etherbase=0x0000000000000000000000000000000000000001
-  #   links:
-  #     - node1
-  #     - node2
-  #   depends_on:
-  #     - node1
-  #     - node2
-  #   volumes:
-  #     - cpuminer:/root/.ethereum
 
 
